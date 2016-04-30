@@ -84,4 +84,6 @@
     <string name="msg_loading">Loading...</string>
     <string name="msg_please_wait">Please wait</string>
     <string name="msg_try_again">Try again</string>
+    <string name="label_no_trailers">No trailers found</string>
+    <string name="label_no_reviews">No reviews found for this movie</string>
 </resources>

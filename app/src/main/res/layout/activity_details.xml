@@ -266,28 +266,28 @@
                     android:textSize="25sp"
                     android:maxLines="3"
                     android:padding="8dp"
-                    android:textStyle="bold"
-                    />
-                <LinearLayout
+                    android:textStyle="bold" />
+
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginLeft="10dp">
+                    android:text="@string/label_no_trailers"
+                    android:textColor="@color/navigationBarColor"
+                    android:id="@+id/details_no_trailers_textView"
+                    android:visibility="gone"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:textSize="25sp"
+                    android:maxLines="3"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
 
-                    <ImageButton
-                        android:layout_width="40dp"
-                        android:layout_height="30dp"
-                        android:id="@+id/details_play_imageButton"
-                        android:src="@drawable/play_vedio" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/label_trailer"
-                        android:layout_marginLeft="10dp"/>
-
-                </LinearLayout>
+                <ListView
+                    android:id="@+id/details_trailers_list"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent">
+                </ListView>
 
                 <View
                     android:layout_width="match_parent"
@@ -296,6 +296,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     android:background="@android:color/darker_gray" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -307,12 +308,28 @@
                     android:textSize="25sp"
                     android:maxLines="3"
                     android:padding="8dp"
-                    android:textStyle="bold"
-                    />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/details_reviews_textView"/>
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_no_reviews"
+                    android:visibility="gone"
+                    android:id="@+id/details_no_reviews_textView"
+                    android:textColor="@color/navigationBarColor"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:textSize="25sp"
+                    android:maxLines="3"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+
+                <ListView
+                    android:id="@+id/details_reviews_list"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent">
+                </ListView>
 
             </LinearLayout>
         </LinearLayout>

@@ -48,6 +48,24 @@ public class APIsManager {
 
         });
     }
+
+    public static void uriAPI(final Activity activity,final String url, final ResponseListener responseListener){
+
+        new ConnectionManager(activity,GET,url,true).perform( new ConnectionManager.ConnectionResponse() {
+            @Override
+            public void response(String response) {
+
+                LogManager.log("testUriAPI", response);
+                responseListener.done(response);
+            }
+            @Override
+            public void serverNotFound() {
+                ConnectionManager.showServerNotAvailable(activity);
+            }
+
+        });
+    }
+
     public static interface ResponseListener {
         void done(String response);
     }
