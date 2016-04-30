@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="200dp"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@color/colorPrimaryDark"
+    android:layout_margin="10dp">
+
+    <ImageView
+        android:id="@+id/single_grid_poster_imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:src="@drawable/movie_img"
+        android:layout_gravity="center">
+    </ImageView>
+
+    <TextView
+        android:id="@+id/single_grid_title_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textColor="@android:color/white"
+        android:text="@string/movie_test_title"
+        android:layout_gravity="center"
+        android:layout_margin="15dp">
+    </TextView>
+
+</LinearLayout>
