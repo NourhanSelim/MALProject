@@ -29,6 +29,7 @@ public class MoviesFragment extends Fragment {
 
 
     private View view;
+    private GridView gridView;
 
     int[] imageId = {
             R.drawable.movie_img,
@@ -74,6 +75,7 @@ public class MoviesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_movies,container,false);
+        gridView = (GridView) view.findViewById(R.id.fragment_movies_gridView);
         return view;
     }
 
@@ -84,8 +86,6 @@ public class MoviesFragment extends Fragment {
     }
 
     public void loadGrid(final JSONArray jsonArray){
-
-        GridView gridView = (GridView) view.findViewById(R.id.fragment_movies_gridView);
 
         ArrayList moviesOriginalTitlesArrayList = new ArrayList(),
                 moviesPostersPathsArrayList = new ArrayList();
@@ -107,7 +107,7 @@ public class MoviesFragment extends Fragment {
 
         }
 
-        CustomGridAdapter adapter = new CustomGridAdapter(view.getContext(), moviesOriginalTitlesArrayList, imageId);
+        CustomGridAdapter adapter = new CustomGridAdapter(getActivity(), moviesOriginalTitlesArrayList, imageId);
         gridView.setAdapter(adapter); // uses the view to get the context instead of getActivity().
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

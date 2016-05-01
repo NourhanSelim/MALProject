@@ -24,7 +24,7 @@ package com.nourhanselimapps.malproject;//package com.nourhanselimapps.malprojec
 //
 //    @Override
 //    protected void onPreExecute() {
-////        pDialog = new ProgressDialog(MainActivity.this);
+////        pDialog = new ProgressDialog(DBMainActivity.this);
 ////        pDialog.setMessage("Attempting login...");
 ////        pDialog.setIndeterminate(false);
 ////        pDialog.setCancelable(true);
@@ -68,7 +68,7 @@ package com.nourhanselimapps.malproject;//package com.nourhanselimapps.malprojec
 //        }
 //
 //        if (json != null) {
-////            Toast.makeText(MainActivity.this, json.toString(),
+////            Toast.makeText(DBMainActivity.this, json.toString(),
 ////                    Toast.LENGTH_LONG).show();
 //            Log.e("JsonResponse",""+json);
 //

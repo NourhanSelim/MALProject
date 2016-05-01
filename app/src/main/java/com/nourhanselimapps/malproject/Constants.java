@@ -6,8 +6,7 @@ import java.util.ArrayList;
  * Created by Nourhan Selim on 2016-03-25.
  */
 public class Constants {
-    public static String URL_REVIEWS ="" ;
-    public static String URL_TRAILERS ="" ;
+
     public static String TAG_API_KEY="8e0b1ac01e6e1f84d3716217c1c9f1b4";
     public static String TAG_POPULAR ="/popular";
     public static String TAG_TOP_RATED ="?sort_by=vote_average.desc";

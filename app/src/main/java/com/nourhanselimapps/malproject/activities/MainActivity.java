@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import com.nourhanselimapps.malproject.Constants;
 import com.nourhanselimapps.malproject.R;
 import com.nourhanselimapps.malproject.adapters.TabsPagerAdapter;
+import com.nourhanselimapps.malproject.database.DBHelper;
 import com.nourhanselimapps.malproject.fragments.FavouriteFragment;
 import com.nourhanselimapps.malproject.fragments.MoviesFragment;
 import com.nourhanselimapps.malproject.tools.APIsManager;
@@ -22,6 +23,8 @@ import com.nourhanselimapps.malproject.tools.LogManager;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -148,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                         moviesFragment.loadGrid(resultsJSONArray);
 
 
-//                        Intent intent=new Intent(MainActivity.this, MoviesFragment.class);
+//                        Intent intent=new Intent(DBMainActivity.this, MoviesFragment.class);
 //                        intent.putExtra(KEY_DATA, resultsJSONArray.toString());
 
 //                        MoviesFragment moviesFragment = new MoviesFragment();

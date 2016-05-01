@@ -3,6 +3,7 @@ package com.nourhanselimapps.malproject.tools;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.widget.Toast;
 
 /**
  * Created by Nourhan Selim on 2016-04-01.
@@ -18,6 +19,9 @@ public class DialogManager {
             }
         });
         return progressDialog;
+    }
+    public static void showToast(Context context, String text){
+        Toast.makeText(context, text, Toast.LENGTH_LONG).show();
     }
 
     public static interface DialogListener {

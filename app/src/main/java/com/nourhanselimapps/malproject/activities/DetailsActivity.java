@@ -1,6 +1,7 @@
 package com.nourhanselimapps.malproject.activities;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -11,15 +12,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nourhanselimapps.malproject.Constants;
 import com.nourhanselimapps.malproject.R;
+import com.nourhanselimapps.malproject.database.DBHelper;
 import com.nourhanselimapps.malproject.fragments.MoviesFragment;
 import com.nourhanselimapps.malproject.tools.APIsManager;
+import com.nourhanselimapps.malproject.tools.DialogManager;
 import com.nourhanselimapps.malproject.tools.LogManager;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,9 +36,12 @@ import java.util.ArrayList;
 /**
  * Created by Nourhan Selim on 2016-03-25.
  */
+
 public class DetailsActivity extends AppCompatActivity {
 
-    static final String youtubeURL="https://www.youtube.com/watch?v=";
+    private static final String youtubeURL="https://www.youtube.com/watch?v=";
+    private boolean isFavourite;
+    private DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -57,22 +65,45 @@ public class DetailsActivity extends AppCompatActivity {
     public void extractingData(final JSONObject jsonObject){
 
         TextView movieTitleTextView = (TextView) findViewById(R.id.details_movie_title_textView);
-        TextView movieDurationTextView = (TextView) findViewById(R.id.details_movie_duration_textView);
+        TextView movieVoteAverageTextView = (TextView) findViewById(R.id.details_movie_vote_average_textView);
         TextView movieReleaseDateTextView = (TextView) findViewById(R.id.details_movie_release_date_textView);
         TextView movieOverviewsTextView = (TextView) findViewById(R.id.details_overviews_textView);
+        ImageView movieBackDropPathImageView =(ImageView) findViewById(R.id.details_back_drop_path_imageView);
+        ImageView moviePosterPathImageView =(ImageView) findViewById(R.id.details_poster_path_imageView);
 
         Button movieLanguageButton = (Button) findViewById(R.id.details_language_button);
         Button moviePopularityCountsButton = (Button) findViewById(R.id.details_popularity_button);
         Button movieVoteCountsButton = (Button) findViewById(R.id.details_vote_button);
 
+        final ImageView favouriteImageButton =(ImageView) findViewById(R.id.details_favourite_imageButton);
+        ImageView shareImageButton =(ImageView) findViewById(R.id.details_share_imageButton);
+
         try {
-            Constants.poster_path = jsonObject.getString(Constants.TAG_POSTER_PATH);
-            movieTitleTextView.setText(jsonObject.getString(Constants.TAG_ORIGINAL_TITLE));
+            final String id,title = "", posterPath, backDropPath, overview, releaseDate, originalTitle, originalLanguage, popularity, voteCount, voteAverage;
+            posterPath = jsonObject.getString(Constants.TAG_POSTER_PATH);
+            backDropPath =jsonObject.getString(Constants.TAG_BACKDROP_PATH);
+            originalTitle = jsonObject.getString(Constants.TAG_ORIGINAL_TITLE);
+            overview =jsonObject.getString(Constants.TAG_OVERVIEW);
+            releaseDate=jsonObject.getString(Constants.TAG_RELEASE_DATE);
+            originalLanguage=jsonObject.getString(Constants.TAG_ORIGINAL_LANGUAGE);
+            voteCount=jsonObject.getString(Constants.TAG_VOTE_COUNT);
+            voteAverage=jsonObject.getString(Constants.TAG_VOTE_AVERAGE);
+            id=jsonObject.getString(Constants.TAG_MOVIE_ID);
+
+            Picasso.with(this)
+                    .load(posterPath)
+                    .into(moviePosterPathImageView);
+            Picasso.with(this)
+                    .load(backDropPath)
+                    .into(movieBackDropPathImageView);
+
+            movieTitleTextView.setText(originalTitle);
+            movieVoteAverageTextView.setText(getString(R.string.label_vote_average)+" "+ voteAverage);
 //        movieDurationTextView.setText(jsonObject.getString(R.string.label_duration+ Constants.TAG));
-            movieReleaseDateTextView.setText(jsonObject.getString(Constants.TAG_RELEASE_DATE));
-            movieOverviewsTextView.setText(jsonObject.getString(Constants.TAG_OVERVIEW));
-//        movieReviewsTextView.setText(jsonObject.getString(Constants.RE));
-            movieLanguageButton.setText(jsonObject.getString(Constants.TAG_ORIGINAL_LANGUAGE));
+            movieReleaseDateTextView.setText(getString(R.string.label_released)+" ( "+ releaseDate+" )");
+            movieOverviewsTextView.setText(overview);
+            movieLanguageButton.setText(originalLanguage);
+
             float popularityCount= Float.parseFloat((jsonObject.getString(Constants.TAG_POPULARITY)));
             popularityCount=popularityCount*100;
             LogManager.log("popularityCount",popularityCount+"");
@@ -80,20 +111,59 @@ public class DetailsActivity extends AppCompatActivity {
             popularityCount=popularityCountInt;
             popularityCount=popularityCount/100;
 
-            String popularityCountString= String.valueOf(popularityCount);
-//            popularityCount= popularityCount/100;
+            popularity= String.valueOf(popularityCount);
 
-            LogManager.log("popularityCountInt",popularityCountInt+"");
+            moviePopularityCountsButton.setText(popularity);
+            movieVoteCountsButton.setText(voteCount);
 
-            LogManager.log("popularityCountInt",popularityCount+"");
-            moviePopularityCountsButton.setText(popularityCountString);
-            movieVoteCountsButton.setText(jsonObject.getString(Constants.TAG_VOTE_COUNT));
+            dbHelper =new DBHelper(this);
+            isFavourite = dbHelper.isFavourite(id);
+            if(isFavourite){
+                favouriteImageButton.setImageResource(R.drawable.star_press);
+            }else {
+                favouriteImageButton.setImageResource(R.drawable.star_unpressed);
+            }
+
+            favouriteImageButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Perform action on click
+                    if(!isFavourite){
+                        if(dbHelper.insertFavouriteMovie(id,posterPath,backDropPath,overview,releaseDate,originalTitle,originalLanguage,popularity,voteCount,voteAverage)){
+                            DialogManager.showToast(DetailsActivity.this,"Favourite");
+                            isFavourite=true;
+                            favouriteImageButton.setImageResource(R.drawable.star_press);
+                        }
+                    }else{
+                        int isDelete =dbHelper.deleteMovie(id);
+                        LogManager.log("Delete",isDelete+"");
+                        if(isDelete>0){
+                            DialogManager.showToast(DetailsActivity.this,"removed from favourite");
+                            isFavourite=false;
+                            favouriteImageButton.setImageResource(R.drawable.star_unpressed);
+                        }
+
+                    }
+//                    LogManager.log("Test store",dbHelper.getData(id).toString());
+//
+//                    Cursor cursor = dbHelper.getData(id);
+//                    cursor.moveToFirst();
+//
+//                    String title = cursor.getString(cursor.getColumnIndex(DBHelper.favouriteMovies_COLUMN_ORIGINAL_TITLE));
+//                    String overview = cursor.getString(cursor.getColumnIndex(DBHelper.favouriteMovies_COLUMN_OVERVIEW));
+//
+//                    LogManager.log("test22stoore",title+overview);
+//
+//                    if (!cursor.isClosed())
+//                    {
+//                        cursor.close();
+//                    }
+                }
+            });
 
             String movieID=jsonObject.getString(Constants.TAG_MOVIE_ID);
             LogManager.log("movieID",movieID);
             Uri.Builder trailersUri = getURI(movieID, "trailers");
             Uri.Builder reviewsUri = getURI(movieID, "reviews");
-//            LogManager.log("testURI",youtubeURL + uri);
             LogManager.log("testReviews", reviewsUri + "");
 
             APIsManager.uriAPI(this, trailersUri.toString(), new APIsManager.ResponseListener() {
@@ -199,7 +269,7 @@ public class DetailsActivity extends AppCompatActivity {
                     }
 
                 }
-            }); // end of api call
+            }); // end of reviews api call
 
             CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.details_collapsing_toolbar);
             collapsingToolbar.setTitle(jsonObject.getString(Constants.TAG_ORIGINAL_TITLE));
