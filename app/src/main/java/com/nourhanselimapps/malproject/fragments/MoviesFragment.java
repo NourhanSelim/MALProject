@@ -14,6 +14,7 @@ import com.nourhanselimapps.malproject.adapters.CustomGridAdapter;
 import com.nourhanselimapps.malproject.R;
 import com.nourhanselimapps.malproject.activities.DetailsActivity;
 import com.nourhanselimapps.malproject.tools.LogManager;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,12 +31,6 @@ public class MoviesFragment extends Fragment {
 
     private View view;
     private GridView gridView;
-
-    int[] imageId = {
-            R.drawable.movie_img,
-            R.drawable.movie_img,
-            R.drawable.movie_img,
-    };
 
     public MoviesFragment(){
 
@@ -107,7 +102,7 @@ public class MoviesFragment extends Fragment {
 
         }
 
-        CustomGridAdapter adapter = new CustomGridAdapter(getActivity(), moviesOriginalTitlesArrayList, imageId);
+        CustomGridAdapter adapter = new CustomGridAdapter(getActivity(), moviesOriginalTitlesArrayList,moviesPostersPathsArrayList);
         gridView.setAdapter(adapter); // uses the view to get the context instead of getActivity().
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

@@ -87,4 +87,5 @@
     <string name="label_no_trailers">No trailers found</string>
     <string name="label_no_reviews">No reviews found for this movie</string>
     <string name="label_vote_average">Vote Average : </string>
+    <string name="msg_check_internet">Check your internet connection</string>
 </resources>

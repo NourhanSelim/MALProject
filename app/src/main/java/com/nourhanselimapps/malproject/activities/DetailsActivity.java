@@ -22,8 +22,10 @@ import com.nourhanselimapps.malproject.R;
 import com.nourhanselimapps.malproject.database.DBHelper;
 import com.nourhanselimapps.malproject.fragments.MoviesFragment;
 import com.nourhanselimapps.malproject.tools.APIsManager;
+import com.nourhanselimapps.malproject.tools.ConnectionManager;
 import com.nourhanselimapps.malproject.tools.DialogManager;
 import com.nourhanselimapps.malproject.tools.LogManager;
+import com.nourhanselimapps.malproject.tools.ShareManager;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -40,6 +42,7 @@ import java.util.ArrayList;
 public class DetailsActivity extends AppCompatActivity {
 
     private static final String youtubeURL="https://www.youtube.com/watch?v=";
+    private String shareLink;
     private boolean isFavourite;
     private DBHelper dbHelper;
     @Override
@@ -79,7 +82,7 @@ public class DetailsActivity extends AppCompatActivity {
         ImageView shareImageButton =(ImageView) findViewById(R.id.details_share_imageButton);
 
         try {
-            final String id,title = "", posterPath, backDropPath, overview, releaseDate, originalTitle, originalLanguage, popularity, voteCount, voteAverage;
+            final String id, posterPath, backDropPath, overview, releaseDate, originalTitle, originalLanguage, popularity, voteCount, voteAverage;
             posterPath = jsonObject.getString(Constants.TAG_POSTER_PATH);
             backDropPath =jsonObject.getString(Constants.TAG_BACKDROP_PATH);
             originalTitle = jsonObject.getString(Constants.TAG_ORIGINAL_TITLE);
@@ -90,7 +93,7 @@ public class DetailsActivity extends AppCompatActivity {
             voteAverage=jsonObject.getString(Constants.TAG_VOTE_AVERAGE);
             id=jsonObject.getString(Constants.TAG_MOVIE_ID);
 
-            String url="http://i.imgur.com/";
+            String url="https://image.tmdb.org/t/p/w185/";
             Picasso.with(this)
                     .load(url+posterPath)
                     .into(moviePosterPathImageView);
@@ -100,7 +103,6 @@ public class DetailsActivity extends AppCompatActivity {
 
             movieTitleTextView.setText(originalTitle);
             movieVoteAverageTextView.setText(getString(R.string.label_vote_average)+" "+ voteAverage);
-//        movieDurationTextView.setText(jsonObject.getString(R.string.label_duration+ Constants.TAG));
             movieReleaseDateTextView.setText(getString(R.string.label_released)+" ( "+ releaseDate+" )");
             movieOverviewsTextView.setText(overview);
             movieLanguageButton.setText(originalLanguage);
@@ -163,114 +165,126 @@ public class DetailsActivity extends AppCompatActivity {
 
             String movieID=jsonObject.getString(Constants.TAG_MOVIE_ID);
             LogManager.log("movieID",movieID);
-            Uri.Builder trailersUri = getURI(movieID, "trailers");
+            final Uri.Builder trailersUri = getURI(movieID, "trailers");
             Uri.Builder reviewsUri = getURI(movieID, "reviews");
             LogManager.log("testReviews", reviewsUri + "");
 
-            APIsManager.uriAPI(this, trailersUri.toString(), new APIsManager.ResponseListener() {
-
-                @Override
-                public void done(String response) {
-                    try {
-                        LogManager.log("loginTry", "loginTry");
-
-                        JSONObject uriResponseJsonObject = new JSONObject(response);
-                        LogManager.log("uriResponseJsonObject", "" + uriResponseJsonObject);
-                        JSONArray resultsJSONArray = uriResponseJsonObject.getJSONArray(Constants.TAG_RESULTS);
-
-                        final ListView trailersListView = (ListView) findViewById(R.id.details_trailers_list);
-
-                        ArrayList trailersName = new ArrayList();
-                        final ArrayList trailersKey = new ArrayList();
-
-                        if(resultsJSONArray.length()!=0){
-                        for (int i = 0; i < resultsJSONArray.length(); i++) {
-                            JSONObject jsonObject1 = resultsJSONArray.getJSONObject(i);
-                            trailersName.add(jsonObject1.getString(Constants.TAG_NAME));
-                            trailersKey.add(jsonObject1.getString(Constants.TAG_KEY));
-                            LogManager.log("testTrailersFor", jsonObject1.toString() + trailersKey + trailersName);
-                        }
-                        LogManager.log("names", trailersName.size() + " - " + trailersName.toString());
-
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(DetailsActivity.this,
-                                R.layout.list_item_trailers, R.id.list_item_trailers_name_textView, trailersName);
-                        trailersListView.setAdapter(adapter);
-                        setListViewHeightBasedOnChildren(trailersListView);
-
-                        trailersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Log.e("itemClicked", "itemClicked");
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeURL + trailersKey.get(position))));
-                            }
-                        });
-                    }else{
-                        TextView noReviewsTextView = (TextView) findViewById(R.id.details_no_reviews_textView);
-                        noReviewsTextView.setVisibility(View.VISIBLE);
-                    }
-                } catch(JSONException e) {
-                    LogManager.log("error", e.toString());
+            shareImageButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Perform action on click
+                    ShareManager.shareText(DetailsActivity.this,shareLink);
                 }
+            });
+
+            if(ConnectionManager.isOnline(this)) {
+                APIsManager.uriAPI(this, trailersUri.toString(), new APIsManager.ResponseListener() {
+
+                    @Override
+                    public void done(String response) {
+                        try {
+                            LogManager.log("loginTry", "loginTry");
+
+                            JSONObject uriResponseJsonObject = new JSONObject(response);
+                            LogManager.log("uriResponseJsonObject", "" + uriResponseJsonObject);
+                            JSONArray resultsJSONArray = uriResponseJsonObject.getJSONArray(Constants.TAG_RESULTS);
+
+                            final ListView trailersListView = (ListView) findViewById(R.id.details_trailers_list);
+
+                            ArrayList trailersName = new ArrayList();
+                            final ArrayList trailersKey = new ArrayList();
+
+                            if (resultsJSONArray.length() != 0) {
+                                for (int i = 0; i < resultsJSONArray.length(); i++) {
+                                    JSONObject jsonObject1 = resultsJSONArray.getJSONObject(i);
+                                    trailersName.add(jsonObject1.getString(Constants.TAG_NAME));
+                                    trailersKey.add(jsonObject1.getString(Constants.TAG_KEY));
+                                    LogManager.log("testTrailersFor", jsonObject1.toString() + trailersKey + trailersName);
+                                }
+                                shareLink=youtubeURL+trailersKey.get(0).toString();
+                                LogManager.log("names", trailersName.size() + " - " + trailersName.toString());
+
+                                ArrayAdapter<String> adapter = new ArrayAdapter<String>(DetailsActivity.this,
+                                        R.layout.list_item_trailers, R.id.list_item_trailers_name_textView, trailersName);
+                                trailersListView.setAdapter(adapter);
+                                setListViewHeightBasedOnChildren(trailersListView);
+
+                                trailersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        Log.e("itemClicked", "itemClicked");
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeURL + trailersKey.get(position))));
+                                    }
+                                });
+                            } else {
+                                TextView noReviewsTextView = (TextView) findViewById(R.id.details_no_reviews_textView);
+                                noReviewsTextView.setVisibility(View.VISIBLE);
+                            }
+                        } catch (JSONException e) {
+                            LogManager.log("error", e.toString());
+                        }
+                    }
+                }); // end of api call
+
+                APIsManager.uriAPI(this, reviewsUri.toString(), new APIsManager.ResponseListener() {
+
+                    @Override
+                    public void done(String response) {
+                        try {
+                            LogManager.log("loginTry", "loginTry");
+
+                            JSONObject uriResponseJsonObject = new JSONObject(response);
+                            LogManager.log("uriResponseJsonObject", "" + uriResponseJsonObject);
+                            JSONArray resultsJSONArray = uriResponseJsonObject.getJSONArray(Constants.TAG_RESULTS);
+
+                            final ListView reviewsListView = (ListView) findViewById(R.id.details_reviews_list);
+
+                            final ArrayList reviewsAuthors = new ArrayList();
+                            final ArrayList reviewsContents = new ArrayList();
+
+                            if (resultsJSONArray.length() != 0) {
+
+                                for (int i = 0; i < resultsJSONArray.length(); i++) {
+                                    JSONObject jsonObject1 = resultsJSONArray.getJSONObject(i);
+                                    reviewsAuthors.add(jsonObject1.getString(Constants.TAG_AUTHOR));
+                                    reviewsContents.add(jsonObject1.getString(Constants.TAG_CONTENT));
+                                    LogManager.log("testReviewsFor", jsonObject1.toString() + reviewsContents + reviewsAuthors);
+                                }
+
+
+                                ArrayAdapter<String> adapter = new ArrayAdapter<String>(DetailsActivity.this,
+                                        R.layout.list_item_reviews, R.id.list_item_reviews_author_textView, reviewsAuthors) {
+                                    @Override
+                                    public View getView(int position, View convertView, ViewGroup parent) {
+                                        View view = super.getView(position, convertView, parent);
+                                        ((TextView) view.findViewById(R.id.list_item_reviews_author_textView)).setText("( " + reviewsAuthors.get(position).toString() + " )");
+                                        ((TextView) view.findViewById(R.id.list_item_reviews_content_textView)).setText(reviewsContents.get(position).toString());
+                                        return view;
+                                    }
+                                };
+
+                                reviewsListView.setAdapter(adapter);
+                                setListViewHeightBasedOnChildren(reviewsListView);
+
+                                reviewsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        Log.e("itemClicked", "itemClicked");
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeURL + reviewsContents.get(position))));
+                                    }
+                                });
+                            } else {
+                                TextView noReviewsTextView = (TextView) findViewById(R.id.details_no_reviews_textView);
+                                noReviewsTextView.setVisibility(View.VISIBLE);
+                            }
+                        } catch (JSONException e) {
+                            LogManager.log("error", e.toString());
+                        }
+
+                    }
+                }); // end of reviews api call
+            }else {
+                DialogManager.showToast(this, getString(R.string.msg_check_internet));
             }
-        }); // end of api call
-
-            APIsManager.uriAPI(this, reviewsUri.toString(), new APIsManager.ResponseListener() {
-
-                @Override
-                public void done(String response) {
-                    try {
-                        LogManager.log("loginTry", "loginTry");
-
-                        JSONObject uriResponseJsonObject = new JSONObject(response);
-                        LogManager.log("uriResponseJsonObject", "" + uriResponseJsonObject);
-                        JSONArray resultsJSONArray = uriResponseJsonObject.getJSONArray(Constants.TAG_RESULTS);
-
-                        final ListView reviewsListView = (ListView) findViewById(R.id.details_reviews_list);
-
-                        final ArrayList reviewsAuthors = new ArrayList();
-                        final ArrayList reviewsContents = new ArrayList();
-
-                        if(resultsJSONArray.length()!=0) {
-
-                            for (int i = 0; i < resultsJSONArray.length(); i++) {
-                                JSONObject jsonObject1 = resultsJSONArray.getJSONObject(i);
-                                reviewsAuthors.add(jsonObject1.getString(Constants.TAG_AUTHOR));
-                                reviewsContents.add(jsonObject1.getString(Constants.TAG_CONTENT));
-                                LogManager.log("testReviewsFor", jsonObject1.toString() + reviewsContents + reviewsAuthors);
-                            }
-
-
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(DetailsActivity.this,
-                                    R.layout.list_item_reviews, R.id.list_item_reviews_author_textView, reviewsAuthors) {
-                                @Override
-                                public View getView(int position, View convertView, ViewGroup parent) {
-                                    View view = super.getView(position, convertView, parent);
-                                    ((TextView) view.findViewById(R.id.list_item_reviews_author_textView)).setText("( "+reviewsAuthors.get(position).toString()+" )");
-                                    ((TextView) view.findViewById(R.id.list_item_reviews_content_textView)).setText(reviewsContents.get(position).toString());
-                                    return view;
-                                }
-                            };
-
-                            reviewsListView.setAdapter(adapter);
-                            setListViewHeightBasedOnChildren(reviewsListView);
-
-                            reviewsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    Log.e("itemClicked", "itemClicked");
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeURL + reviewsContents.get(position))));
-                                }
-                            });
-                        }else{
-                            TextView noReviewsTextView =(TextView)findViewById(R.id.details_no_reviews_textView);
-                            noReviewsTextView.setVisibility(View.VISIBLE);
-                        }
-                    } catch(JSONException e) {
-                        LogManager.log("error", e.toString());
-                    }
-
-                }
-            }); // end of reviews api call
 
             CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.details_collapsing_toolbar);
             collapsingToolbar.setTitle(jsonObject.getString(Constants.TAG_ORIGINAL_TITLE));
@@ -312,8 +326,6 @@ public class DetailsActivity extends AppCompatActivity {
         }
         uriBuilder.appendPath("3").appendPath("movie").appendPath(movieID).appendPath(need);
         uriBuilder.appendQueryParameter("api_key",Constants.TAG_API_KEY);
-
         return uriBuilder;
-
     }
 }

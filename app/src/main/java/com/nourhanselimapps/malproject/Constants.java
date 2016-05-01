@@ -9,7 +9,7 @@ public class Constants {
 
     public static String TAG_API_KEY="8e0b1ac01e6e1f84d3716217c1c9f1b4";
     public static String TAG_POPULAR ="/popular";
-    public static String TAG_TOP_RATED ="?sort_by=vote_average.desc";
+    public static String TAG_TOP_RATED ="vote_average.desc";
 
     public static String REQUEST_BEGIN_BASE = "https://api.themoviedb.org/3/movie";
 

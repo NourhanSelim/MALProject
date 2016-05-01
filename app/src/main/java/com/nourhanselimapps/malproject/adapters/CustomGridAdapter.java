@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nourhanselimapps.malproject.R;
+import com.nourhanselimapps.malproject.activities.MainActivity;
 import com.nourhanselimapps.malproject.tools.LogManager;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -20,11 +22,11 @@ public class CustomGridAdapter extends BaseAdapter {
 
     private Context mContext;
     private final ArrayList moviesTitles;
-    private final int[] imageId;
+    private final ArrayList posterPathes;
 
-    public CustomGridAdapter(Context c, ArrayList moviesTitles, int[] imageId) {
+    public CustomGridAdapter(Context c, ArrayList moviesTitles, ArrayList posterPathes) {
         mContext = c;
-        this.imageId = imageId;
+        this.posterPathes = posterPathes;
         this.moviesTitles = moviesTitles;
     }
 
@@ -73,8 +75,13 @@ public class CustomGridAdapter extends BaseAdapter {
         }
 
         TextView textView = (TextView) grid.findViewById(R.id.single_grid_title_textView);
-        ImageView imageView = (ImageView)grid.findViewById(R.id.single_grid_poster_imageView);
+        ImageView moviePosterPathImageView = (ImageView)grid.findViewById(R.id.single_grid_poster_imageView);
         textView.setText((CharSequence) moviesTitles.get(position));
+        String url="https://image.tmdb.org/t/p/w185/";
+        Picasso.with(mContext)
+                .load(url+posterPathes.get(position))
+                .error(R.drawable.error)
+                .into(moviePosterPathImageView);
         LogManager.log("gridMoviesTitles",moviesTitles.get(position)+"");
         LogManager.log("gridPosition",position+"");
 

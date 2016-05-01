@@ -29,12 +29,6 @@ public class FavouriteFragment extends Fragment {
 
     private GridView favoritesGridView;
 
-    int[] imageId = {
-            R.drawable.movie_img,
-            R.drawable.movie_img,
-            R.drawable.movie_img,
-    };
-
     public FavouriteFragment(){
 
     }
@@ -100,7 +94,7 @@ public class FavouriteFragment extends Fragment {
 
         }
 
-        CustomGridAdapter adapter = new CustomGridAdapter(getActivity(), moviesOriginalTitlesArrayList, imageId);
+        CustomGridAdapter adapter = new CustomGridAdapter(getActivity(), moviesOriginalTitlesArrayList, moviesPostersPathsArrayList);
         favoritesGridView.setAdapter(adapter); // uses the view to get the context instead of getActivity().
         favoritesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

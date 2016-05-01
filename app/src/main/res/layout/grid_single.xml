@@ -4,28 +4,30 @@
     android:layout_height="300dp"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/colorPrimaryDarkTrans"
     android:layout_margin="15dp">
 
     <ImageView
         android:id="@+id/single_grid_poster_imageView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
         android:src="@drawable/movie_img"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:layout_weight="2">
     </ImageView>
 
     <TextView
         android:id="@+id/single_grid_title_textView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:textSize="15sp"
         android:textColor="@android:color/white"
         android:text="@string/movie_test_title"
         android:layout_gravity="center"
         android:layout_margin="15dp"
-        android:lines="1">
+        android:lines="1"
+        android:layout_weight="1">
     </TextView>
 
 </LinearLayout>

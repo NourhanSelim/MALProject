@@ -1,5 +1,6 @@
 package com.nourhanselimapps.malproject.activities;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,8 @@ import com.nourhanselimapps.malproject.database.DBHelper;
 import com.nourhanselimapps.malproject.fragments.FavouriteFragment;
 import com.nourhanselimapps.malproject.fragments.MoviesFragment;
 import com.nourhanselimapps.malproject.tools.APIsManager;
+import com.nourhanselimapps.malproject.tools.ConnectionManager;
+import com.nourhanselimapps.malproject.tools.DialogManager;
 import com.nourhanselimapps.malproject.tools.LogManager;
 
 import org.json.JSONArray;
@@ -97,6 +100,28 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        if (ConnectionManager.isOnline(this)) {
+        APIsManager.uriAPI(this,Constants.URL_POPULAR ,new APIsManager.ResponseListener() {
+
+            @Override
+            public void done(String response) {
+                try {
+                    LogManager.log("loginTry", "loginTry");
+
+                    JSONObject responseJsonObject = new JSONObject(response);
+                    LogManager.log("most_popularResponseJsonObject", "" + responseJsonObject);
+                    JSONArray resultsJSONArray = responseJsonObject.getJSONArray(Constants.TAG_RESULTS);
+                    moviesFragment.loadGrid(resultsJSONArray);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }); // end of api call
+        }else {
+            DialogManager.showToast(this, getString(R.string.msg_check_internet));
+        }
 
 //
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -132,68 +157,67 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        if (ConnectionManager.isOnline(this)) {
         if (id == R.id.top_rated) {
 
-            selectedView="top_rated";
+            selectedView = "top_rated";
+            Uri.Builder uriBuilder = new Uri.Builder();
+            uriBuilder.scheme("http");
+            uriBuilder.authority("api.themoviedb.org");
+            uriBuilder.appendPath("3").appendPath("discover").appendPath("movie");
+            uriBuilder.appendQueryParameter("sort_by",Constants.TAG_TOP_RATED).appendQueryParameter("api_key",Constants.TAG_API_KEY);
 
-            APIsManager.topRatedMoviesAPI(this, new APIsManager.ResponseListener() {
+                APIsManager.uriAPI(this, uriBuilder.toString(), new APIsManager.ResponseListener() {
 
-                @Override
-                public void done(String response) {
+                    @Override
+                    public void done(String response) {
 
-                    try {
-                        LogManager.log("loginTry", "loginTry");
+                        try {
+                            LogManager.log("loginTry", "loginTry");
 
-                        JSONObject responseJsonObject = new JSONObject(response);
-                        LogManager.log("top_ratedResponseJsonObject", "" + responseJsonObject);
-                        JSONArray resultsJSONArray = responseJsonObject.getJSONArray(Constants.TAG_RESULTS);
+                            JSONObject responseJsonObject = new JSONObject(response);
+                            LogManager.log("top_ratedResponseJsonObject", "" + responseJsonObject);
+                            JSONArray resultsJSONArray = responseJsonObject.getJSONArray(Constants.TAG_RESULTS);
 
-                        moviesFragment.loadGrid(resultsJSONArray);
+                            moviesFragment.loadGrid(resultsJSONArray);
 
 
-//                        Intent intent=new Intent(DBMainActivity.this, MoviesFragment.class);
-//                        intent.putExtra(KEY_DATA, resultsJSONArray.toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-//                        MoviesFragment moviesFragment = new MoviesFragment();
-//                        Bundle bundle = new Bundle();
-//                        bundle.putString(KEY_DATA, resultsJSONArray.toString());
-//                        moviesFragment.setArguments(bundle);
-//                        LogManager.log("bundle", "" + bundle);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
+                }); // end of api call
 
-                }
-            }); // end of api call
+            } else if (id == R.id.most_popular) {
 
-        }else if(id == R.id.most_popular){
+                selectedView = "most_popular";
 
-            selectedView="most_popular";
+                APIsManager.uriAPI(this, Constants.URL_POPULAR, new APIsManager.ResponseListener() {
 
-            APIsManager.mostPopularMoviesAPI(this, new APIsManager.ResponseListener() {
+                    @Override
+                    public void done(String response) {
+                        try {
+                            LogManager.log("loginTry", "loginTry");
 
-                @Override
-                public void done(String response) {
-                    // store data on sharedPreference / local store /////////// lma al api trg3 success = 1
-                    try {
-                        LogManager.log("loginTry", "loginTry");
+                            JSONObject responseJsonObject = new JSONObject(response);
+                            LogManager.log("most_popularResponseJsonObject", "" + responseJsonObject);
+                            JSONArray resultsJSONArray = responseJsonObject.getJSONArray(Constants.TAG_RESULTS);
+                            moviesFragment.loadGrid(resultsJSONArray);
 
-                        JSONObject responseJsonObject = new JSONObject(response);
-                        LogManager.log("most_popularResponseJsonObject", "" + responseJsonObject);
-                        JSONArray resultsJSONArray = responseJsonObject.getJSONArray(Constants.TAG_RESULTS);
-                        moviesFragment.loadGrid(resultsJSONArray);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
+                }); // end of api call
 
-                }
-            }); // end of api call
+            }
 
+        } else {
+            DialogManager.showToast(this, getString(R.string.msg_check_internet));
         }
-
         return super.onOptionsItemSelected(item);
-    }
 
+    }
 }
