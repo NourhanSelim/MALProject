@@ -88,7 +88,7 @@
                     android:textColor="@color/navigationBarColor"
                     android:textStyle="bold"
                     android:textSize="22dp"
-                    android:layout_gravity="center"
+                    android:layout_gravity="left"
                     />
 
                 <TextView
@@ -131,6 +131,15 @@
                     <ImageView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:id="@+id/details_share_imageButton"
+                        android:src="@drawable/share"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:id="@+id/details_favourite_imageButton"
                         android:adjustViewBounds="true"
                         android:scaleType="fitXY"
@@ -138,14 +147,6 @@
                         android:src="@drawable/favourite_image_button"
                         />
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/details_share_imageButton"
-                        android:src="@drawable/share"
-                        android:adjustViewBounds="true"
-                        android:scaleType="fitXY"
-                        android:layout_weight="1" />
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
