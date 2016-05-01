@@ -12,6 +12,7 @@ import android.widget.GridView;
 import com.nourhanselimapps.malproject.Constants;
 import com.nourhanselimapps.malproject.R;
 import com.nourhanselimapps.malproject.activities.DetailsActivity;
+import com.nourhanselimapps.malproject.activities.MainActivity;
 import com.nourhanselimapps.malproject.adapters.CustomGridAdapter;
 import com.nourhanselimapps.malproject.database.DBHelper;
 import com.nourhanselimapps.malproject.tools.LogManager;
@@ -104,10 +105,7 @@ public class FavouriteFragment extends Fragment {
                 JSONObject movieDataJSONObject = null;
                 try {
                     movieDataJSONObject = new JSONObject(arrayList.get(position).toString());
-                    Intent intent = new Intent(getContext(), DetailsActivity.class);
-                    intent.putExtra(KEY_DATA,movieDataJSONObject.toString());
-                    LogManager.log("movieDataJSONObject",movieDataJSONObject.toString());
-                    startActivity(intent);
+                    ((MainActivity)getActivity()).showDetails(movieDataJSONObject);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
