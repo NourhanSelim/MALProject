@@ -8,4 +8,5 @@
     <color name="windowBackground">#f4f0f0</color>
     <color name="navigationBarColor">#000000</color>
     <color name="colorPrimaryDarkTrans">#b7800202</color>
+    <color name="colorYellow">#e4ca06</color>
 </resources>

@@ -89,9 +89,13 @@ public class MainActivity extends AppCompatActivity {
 
                             JSONObject responseJsonObject = new JSONObject(response);
                             LogManager.log("top_ratedResponseJsonObject", "" + responseJsonObject);
-                            JSONArray resultsJSONArray = responseJsonObject.getJSONArray(Constants.TAG_RESULTS);
-
-                            moviesFragment.loadGrid(resultsJSONArray);
+                            final JSONArray resultsJSONArray = responseJsonObject.getJSONArray(Constants.TAG_RESULTS);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    moviesFragment.loadGrid(resultsJSONArray);
+                                }
+                            });
 
 
                         } catch (JSONException e) {
@@ -112,8 +116,13 @@ public class MainActivity extends AppCompatActivity {
 
                             JSONObject responseJsonObject = new JSONObject(response);
                             LogManager.log("most_popularResponseJsonObject", "" + responseJsonObject);
-                            JSONArray resultsJSONArray = responseJsonObject.getJSONArray(Constants.TAG_RESULTS);
-                            moviesFragment.loadGrid(resultsJSONArray);
+                            final JSONArray resultsJSONArray = responseJsonObject.getJSONArray(Constants.TAG_RESULTS);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    moviesFragment.loadGrid(resultsJSONArray);
+                                }
+                            });
 
                         } catch (JSONException e) {
                             e.printStackTrace();

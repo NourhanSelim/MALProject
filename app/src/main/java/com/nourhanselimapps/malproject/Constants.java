@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Constants {
 
-    public static String TAG_API_KEY="8e0b1ac01e6e1f84d3716217c1c9f1b4";
+    public static String TAG_API_KEY="8e0b1ac01e6e1f84d3716217c1c9f1b4\n";
     public static String TAG_POPULAR ="/popular";
     public static String TAG_TOP_RATED ="vote_average.desc";
 
