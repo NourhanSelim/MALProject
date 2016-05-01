@@ -1,11 +1,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="200dp"
+    android:layout_height="300dp"
     android:orientation="vertical"
     android:gravity="center"
     android:background="@color/colorPrimaryDark"
-    android:layout_margin="10dp">
+    android:layout_margin="15dp">
 
     <ImageView
         android:id="@+id/single_grid_poster_imageView"
@@ -24,7 +24,8 @@
         android:textColor="@android:color/white"
         android:text="@string/movie_test_title"
         android:layout_gravity="center"
-        android:layout_margin="15dp">
+        android:layout_margin="15dp"
+        android:lines="1">
     </TextView>
 
 </LinearLayout>

@@ -90,11 +90,12 @@ public class DetailsActivity extends AppCompatActivity {
             voteAverage=jsonObject.getString(Constants.TAG_VOTE_AVERAGE);
             id=jsonObject.getString(Constants.TAG_MOVIE_ID);
 
+            String url="http://i.imgur.com/";
             Picasso.with(this)
-                    .load(posterPath)
+                    .load(url+posterPath)
                     .into(moviePosterPathImageView);
             Picasso.with(this)
-                    .load(backDropPath)
+                    .load(url+backDropPath)
                     .into(movieBackDropPathImageView);
 
             movieTitleTextView.setText(originalTitle);
@@ -244,7 +245,7 @@ public class DetailsActivity extends AppCompatActivity {
                                 @Override
                                 public View getView(int position, View convertView, ViewGroup parent) {
                                     View view = super.getView(position, convertView, parent);
-                                    ((TextView) view.findViewById(R.id.list_item_reviews_author_textView)).setText(reviewsAuthors.get(position).toString());
+                                    ((TextView) view.findViewById(R.id.list_item_reviews_author_textView)).setText("( "+reviewsAuthors.get(position).toString()+" )");
                                     ((TextView) view.findViewById(R.id.list_item_reviews_content_textView)).setText(reviewsContents.get(position).toString());
                                     return view;
                                 }

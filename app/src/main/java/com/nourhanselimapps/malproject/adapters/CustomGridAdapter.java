@@ -58,9 +58,6 @@ public class CustomGridAdapter extends BaseAdapter {
 
 //            grid = new View(mContext);
             grid = inflater.inflate(R.layout.grid_single, null);
-            TextView textView = (TextView) grid.findViewById(R.id.single_grid_title_textView);
-            ImageView imageView = (ImageView)grid.findViewById(R.id.single_grid_poster_imageView);
-            textView.setText((CharSequence) moviesTitles.get(position));
 //            imageView.setImageResource(imageId[position]);
 //            grid.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -69,12 +66,17 @@ public class CustomGridAdapter extends BaseAdapter {
 ////                    intent.putExtras()
 //                }
 //            });
-            LogManager.log("gridMoviesTitles",moviesTitles.get(position)+"");
-            LogManager.log("gridPosition",position+"");
+
 
         } else {
             grid = (View) convertView;
         }
+
+        TextView textView = (TextView) grid.findViewById(R.id.single_grid_title_textView);
+        ImageView imageView = (ImageView)grid.findViewById(R.id.single_grid_poster_imageView);
+        textView.setText((CharSequence) moviesTitles.get(position));
+        LogManager.log("gridMoviesTitles",moviesTitles.get(position)+"");
+        LogManager.log("gridPosition",position+"");
 
         return grid;
     }

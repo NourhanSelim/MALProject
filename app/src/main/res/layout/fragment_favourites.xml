@@ -22,7 +22,10 @@
             android:gravity="center"
             android:columnWidth="90dp"
             android:verticalSpacing="10dp"
-            android:horizontalSpacing="10dp"/>
+            android:horizontalSpacing="10dp"
+            android:paddingBottom="60dp"
+            android:clipToPadding="false"
+            android:scrollbarStyle="outsideOverlay"/>
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

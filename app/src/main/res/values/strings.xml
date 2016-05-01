@@ -65,12 +65,12 @@
     <string name="label_top_rated">Top rated</string>
     <string name="label_most_popular">Most popular</string>
     <string name="label_favourites">Favourites</string>
-    <string name="label_trailers">Trailers</string>
+    <string name="label_trailers">Trailers :</string>
     <string name="label_share">Share</string>
-    <string name="label_reviews">Reviews</string>
-    <string name="label_overview">Overview</string>
+    <string name="label_reviews">Reviews :</string>
+    <string name="label_overview">Overview :</string>
     <string name="movie_test_title">Sherlock Holmes</string>
-    <string name="movie_test_overview">jkhjkgfjszxbnmhgud,mjghfcgbnjugiyfutgvbhgfyjvbjgkvhrsgdxnjlhgff</string>
+    <string name="movie_test_overview">test</string>
     <string name="label_duration">Duration</string>
     <string name="label_released">Released date : </string>
     <string name="label_votes">Votes</string>
@@ -78,7 +78,7 @@
     <string name="label_language">Language</string>
     <string name="title_activity_details">Details</string>
     <string name="label_movies">Movies</string>
-    <string name="label_trailer">Trailer</string>
+
     <string name="label_ok">Ok</string>
     <string name="msg_server_not_available">Server is not available ,Try again !!</string>
     <string name="msg_loading">Loading...</string>

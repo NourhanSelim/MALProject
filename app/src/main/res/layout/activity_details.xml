@@ -98,7 +98,8 @@
                     android:maxLines="3"
                     android:padding="8dp"
                     android:text="@string/label_released"
-                    android:textColor="@color/navigationBarColor"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold"
                     android:textSize="14dp"
                     android:layout_marginLeft="25dp"
                     android:layout_gravity="left|center_vertical"/>
@@ -110,22 +111,17 @@
                     android:maxLines="3"
                     android:padding="8dp"
                     android:text="@string/label_vote_average"
-                    android:textColor="@color/navigationBarColor"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold"
                     android:textSize="14dp"
                     android:layout_marginLeft="25dp"
                     android:layout_gravity="left|center_vertical"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2sp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@android:color/darker_gray" />
 
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -276,7 +272,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/movie_test_overview"
-                    android:textColor="@color/navigationBarColor"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold"
                     android:layout_margin="10dp"
                     android:textSize="15sp"
                     />
@@ -326,7 +323,6 @@
                     android:layout_height="2sp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp"
                     android:background="@android:color/darker_gray" />
 
                 <TextView
@@ -360,7 +356,11 @@
                 <ListView
                     android:id="@+id/details_reviews_list"
                     android:layout_height="wrap_content"
-                    android:layout_width="match_parent">
+                    android:layout_width="match_parent"
+                    android:paddingBottom="60dp"
+                    android:clipToPadding="false"
+                    android:scrollbarStyle="outsideOverlay"
+                    android:layout_margin="10dp">
                 </ListView>
 
             </LinearLayout>
